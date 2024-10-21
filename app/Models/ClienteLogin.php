@@ -12,7 +12,9 @@ class ClienteLogin extends Authenticatable
     protected $table = 'clientes_login';
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
 
     protected $hidden = [
