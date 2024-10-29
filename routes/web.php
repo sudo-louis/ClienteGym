@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FakeStoreApiController;
+use App\Http\Controllers\GithubController;
 use App\Http\Controllers\LoginController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -31,27 +32,13 @@ Route::middleware('auth')->group(function () {
     Route::view('/planes/planes','/planes/planes');
 });
 
-Route::get('/login-google', function () {
-    return Socialite::driver('google')->redirect();
+//GitHub Login
+Route::get('auth/github', [GithubController::class, 'redirect'])->name('github.login');
+Route::get('auth/github/callback', [GithubController::class, 'callback']);
+Route::get('/index', function () {
+    return view('index');
 });
-Route::get('/google-callback', function () {
-    $user = Socialite::driver('google')->user();
-    $userExists = User::where('external_id',$user->id)->where('external_auth', 'google')->first();
-    if ($userExists) {
-        Auth::login($user);
-    }else {
-        $userNew = User::create([
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'external_id' => $user->external_id,
-            'external_auth' => $user->external_auth,
-        ]);
-        Auth::login($userNew);
-    }
 
-    return redirect('/index');
-});
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -69,3 +56,27 @@ Route::get('/catalogo/detalle/{id}', [FakeStoreApiController::class, 'productoby
 Route::view('/plantilla/navbar', '/plantilla/navbar');
 Route::view('/plantilla/footer', '/plantilla/footer');
 Route::view('/plantilla/navegacionClient', '/plantilla/navegacionClient');
+
+
+
+// Route::get('/login-google', function () {
+//     return Socialite::driver('google')->redirect();
+// });
+// Route::get('/callback', function() {
+//     $user = Socialite::driver('google')->user();
+//     $userExists = User::where('external_id',$user->id)->where('external_auth', 'google')->first();
+//     if ($userExists) {
+//         Auth::login($user);
+//     }else {
+//         $userNew = User::create([
+//             'name' => $user->name,
+//             'email' => $user->email,
+//             'avatar' => $user->avatar,
+//             'external_id' => $user->external_id,
+//             'external_auth' => $user->external_auth,
+//         ]);
+//         Auth::login($userNew);
+//     }
+
+//     return redirect(route('index'));
+// });
