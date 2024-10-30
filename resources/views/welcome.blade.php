@@ -35,7 +35,7 @@
                                 <input id="remember" aria-describedby="remember" name="remember" type="checkbox" class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" required />
                             </div>
                             <div class="ms-3 text-sm">
-                            <label for="remember" class="font-medium text-gray-500 dark:text-gray-400">Recordar este dispositivo</label>
+                                <label for="remember" class="font-medium text-gray-500 dark:text-gray-400">Recordar este dispositivo</label>
                             </div>
                             <a href="#" class="ms-auto text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Olvidé mi contraseña!</a>
                         </div>
