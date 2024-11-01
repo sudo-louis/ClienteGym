@@ -11,11 +11,10 @@
     <br><br>
     <h1 class="mb-4 text-4xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl dark:text-white text-center">Conoce nuestros <mark class="px-2 text-white bg-blue-600 rounded dark:bg-blue-500">productos</mark> de Alta calidad</h1>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4" style="margin: 3rem 12rem;">
-        <div>
-            @foreach ($productos as $producto)
+        @foreach ($productos as $producto)
             <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <center>
-                    <img class="p-8 rounded-t-lg" src="https://proteinpalacemx.com/cdn/shop/files/BIRDMAN_394x.webp?v=1704933401" alt="product image" />
+                    <img class="p-8 rounded-t-lg" src="{{$producto->foto}}" alt="product image" />
                 </center>
                 <div class="px-5 pb-5">
                     <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-4">
@@ -55,8 +54,7 @@
                     </div>
                 </div>
             </div>
-            @endforeach
-        </div>
+        @endforeach
     </div>
 
     <footer>
