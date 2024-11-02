@@ -2,12 +2,13 @@
 
 use App\Http\Controllers\FakeStoreApiController;
 use App\Http\Controllers\GithubController;
+use App\Http\Controllers\IpDataController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductoController;
+use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Route;
 
 
 /*
@@ -27,9 +28,7 @@ Route::get('/', function () {
 
 //Middlewares
 Route::middleware('auth')->group(function () {
-    Route::get('/index', function () {
-        return view('index');
-    })->name('index');
+    Route::get('/index', [IpDataController::class, 'getUserInfo'])->name('index');
     Route::view('/inventario/inventario','/inventario/inventario');
     Route::view('/planes/planes','/planes/planes');
     Route::get('/inventario/inventario', [ProductoController::class, 'index']);
