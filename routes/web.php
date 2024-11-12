@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiPayPalController;
 use App\Http\Controllers\FakeStoreApiController;
 use App\Http\Controllers\GithubController;
 use App\Http\Controllers\IpDataController;
@@ -29,10 +30,18 @@ Route::get('/', function () {
 //Middlewares
 Route::middleware('auth')->group(function () {
     Route::get('/index', [IpDataController::class, 'getUserInfo'])->name('index');
-    Route::view('/inventario/inventario','/inventario/inventario');
-    Route::view('/planes/planes','/planes/planes');
+    Route::view('/planes/planes', '/planes/planes');
     Route::get('/inventario/inventario', [ProductoController::class, 'index']);
-
+    Route::resource('inventario', ProductoController::class);
+    Route::post('/carrito/agregar',[ProductoController::class, 'agregarCarrito']);
+    Route::get('/prueba/producto', [ProductoController::class, 'productosCarrito']);
+    Route::post('/carrito/quitar', [ProductoController::class, 'quitarCarrito']);
+    Route::post('/carrito/incrementar', [ProductoController::class, 'incrementarCarrito']);
+    Route::post('/carrito/decrementar', [ProductoController::class, 'decrementarCarrito']);
+    //Api de Paypal
+    Route::post('pay', [ApiPayPalController::class, 'pay'])->name('payment');
+    Route::get('success', [ApiPayPalController::class, 'success']);
+    Route::get('error', [ApiPayPalController::class, 'error']);
     //CATALOGO API FAKESTORE
     Route::get('/catalogo/listado', [FakeStoreApiController::class, 'productos']);
     Route::get('/catalogo/detalle/{id}', [FakeStoreApiController::class, 'productobyid']);
@@ -45,7 +54,7 @@ Route::get('auth/github/callback', [GithubController::class, 'callback']);
 //Login y Register con Formulario
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::view('/login/register','/login/register');
+Route::view('/login/register', '/login/register');
 Route::get('/registro', [LoginController::class, 'register'])->name('register');
 Route::post('/registro', [LoginController::class, 'registrar'])->name('registrar');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');

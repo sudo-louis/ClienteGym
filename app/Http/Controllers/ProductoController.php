@@ -13,7 +13,7 @@ class ProductoController extends Controller
     public function index()
     {
         $productos = Producto::all();
-    return view('inventario.inventario', compact('productos'));
+        return view('inventario.inventario', compact('productos'));
     }
 
     /**
@@ -21,7 +21,8 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        //
+        return view('inventario.create');
+        return view('inventario.create', compact('productos'));
     }
 
     /**
@@ -29,7 +30,17 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datosProductos = request()->except('_token');
+        $imagen = $request->file('image');
+        if ($imagen && $imagen->isValid()) {
+            $rutaCarpeta = 'storage/uploads';
+            $nombreImagen = $imagen->getClientOriginalName();
+            $request->file('image')->move($rutaCarpeta, $nombreImagen);
+            $datosProductos['image'] = $nombreImagen;
+        }
+
+        Producto::insert($datosProductos);
+        return redirect('/inventario/create')->with('success', 'Producto registrado con éxito.');
     }
 
     /**
@@ -40,27 +51,42 @@ class ProductoController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    public function productosCarrito(){
+        return view('/inventario/carrito')->with('productosCarrito',\Cart::getContent());
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function agregarCarrito(Request $request){
+        //dd($request->all());
+        \Cart::add(array(
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'attributes' => array(
+                'description' => $request->description,
+                'image' => $request->image,
+                //'subtotal' => $request->price * $request->quantity,
+            )
+        ));
+        return redirect('/prueba/producto');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function quitarCarrito(Request $request){
+        \Cart::remove($request->id);
+        return redirect('/prueba/producto');
+    }
+
+    Public function incrementarCarrito(Request $request){
+        \Cart::update($request->id, array(
+            'quantity' => 1,
+        ));
+        return redirect('/prueba/producto');
+    }
+
+    Public function decrementarCarrito(Request $request){
+        \Cart::update($request->id, array(
+            'quantity' => -1,
+        ));
+        return redirect('/prueba/producto');
     }
 }
